@@ -11,10 +11,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,20 +41,20 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-    userName = (EditText) findViewById(R.id.name);
-     password = (EditText) findViewById(R.id.password);
-       emailId = (EditText) findViewById(R.id.email);
+        userName = (EditText) findViewById(R.id.name);
+        password = (EditText) findViewById(R.id.password);
+        emailId = (EditText) findViewById(R.id.email);
         Button btnSave = (Button) findViewById(R.id.btnSave);
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                String userName1=userName.getText().toString();
-                String pass=password.getText().toString();
-                String email=emailId.getText().toString();
+                String userName1 = userName.getText().toString();
+                String pass = password.getText().toString();
+                String email = emailId.getText().toString();
 
-                new DataInsert().execute(userName1,pass,email);
+                new DataInsert().execute(userName1, pass, email);
             }
         });
 
@@ -64,41 +64,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     public boolean onTouch(View v, MotionEvent event) {
         return false;
     }
-
-    private  class  DataInsert extends AsyncTask<String, Integer, String>{
-        String  randomString;
-
-        @Override
-        protected String doInBackground(String... args) {
-            //TelephonyManager mngr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-           //String imei = mngr.getDeviceId();
-
-            String username = args[0],
-                    pass = args[1],
-                    email = args[2];
-
-//
-           // String unameM = randomString + uname.getText().toString();
-           // String email = randomString + email.getText().toString();
-            //String pass = randomString + pass.getText().toString();
-
-            List<NameValuePair> params = new ArrayList<NameValuePair>();
-            params.add(new BasicNameValuePair("username", username));
-            params.add(new BasicNameValuePair("pass", pass));
-            params.add(new BasicNameValuePair("email", email));
-           // params.add(new BasicNameValuePair("uname", userName.getText().toString()));
-           // params.add(new BasicNameValuePair("email", password.getText().toString()));
-
-
-           json = jsonParser.makeHttpRequest(insert_url, "POST", params);
-
-
-
-            return null;
-        }
-    }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -120,5 +85,29 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private class DataInsert extends AsyncTask<String, Integer, String> {
+        String randomString;
+
+        @Override
+        protected String doInBackground(String... args) {
+            //TelephonyManager mngr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+            //String imei = mngr.getDeviceId();
+
+            String username = args[0],
+                    pass = args[1],
+                    email = args[2];
+
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            params.add(new BasicNameValuePair("username", username));
+            params.add(new BasicNameValuePair("pass", pass));
+            params.add(new BasicNameValuePair("email", email));
+
+            json = jsonParser.makeHttpRequest(insert_url, "POST", params);
+
+
+            return null;
+        }
     }
 }
