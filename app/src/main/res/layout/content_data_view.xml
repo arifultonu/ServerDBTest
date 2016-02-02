@@ -25,8 +25,8 @@
             <TableLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:stretchColumns="0,1,2,3,4"
-                >
+                android:stretchColumns="*"
+                android:id="@+id/viewAlldataTable">
 
             </TableLayout>
         </HorizontalScrollView>

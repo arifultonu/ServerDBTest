@@ -1,5 +1,6 @@
 package expenditure.arifultonu.com.serverdbtest;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TableLayout;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -21,10 +23,17 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener {
 
+    private static final String TAG_All_DATA_NODES = "UserDataList";
+    private static final String TAG_USER_NAME = "UserName";
+    private static final String TAG_PASSWORD = "Password";
+    private static final String TAG_EMAIL = "Email";
+
     private static String insert_url = IPConfigure.getIP()
             + "ArifulTonuAndroidConnectivity/RegistrationServlet";
 
+    TableLayout viewTableLayout;
 
+    ArrayList<Object> dataList = new ArrayList<Object>();
     JSONParser jsonParser = new JSONParser();
     JSONObject json;
     JSONArray jsonArray = null;
@@ -32,7 +41,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     EditText userName;
     EditText password;
     EditText emailId;
-
+    Button btnSave;
+    Button btnView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,17 +54,25 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         userName = (EditText) findViewById(R.id.name);
         password = (EditText) findViewById(R.id.password);
         emailId = (EditText) findViewById(R.id.email);
-        Button btnSave = (Button) findViewById(R.id.btnSave);
+        btnSave = (Button) findViewById(R.id.btnSave);
+        btnView = (Button) findViewById(R.id.btnViewAll);
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 String userName1 = userName.getText().toString();
                 String pass = password.getText().toString();
                 String email = emailId.getText().toString();
 
-                new DataInsert().execute(userName1, pass, email);
+                new DataInsert().execute();
+            }
+        });
+
+        btnView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, DataViewActivity.class));
+                startActivity(new Intent(MainActivity.this, DataViewActivity.class));
             }
         });
 
@@ -87,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         return super.onOptionsItemSelected(item);
     }
 
-    private class DataInsert extends AsyncTask<String, Integer, String> {
+    private class DataInsert extends AsyncTask<String, String, String> {
         String randomString;
 
         @Override
@@ -95,19 +113,28 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             //TelephonyManager mngr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
             //String imei = mngr.getDeviceId();
 
-            String username = args[0],
-                    pass = args[1],
-                    email = args[2];
-
+//            String username = args[0],
+//                    pass = args[1],
+//                    email = args[2];
             List<NameValuePair> params = new ArrayList<NameValuePair>();
-            params.add(new BasicNameValuePair("username", username));
-            params.add(new BasicNameValuePair("pass", pass));
-            params.add(new BasicNameValuePair("email", email));
+
+            params.add(new BasicNameValuePair("username", userName.getText().toString()));
+            params.add(new BasicNameValuePair("pass", password.getText().toString()));
+            params.add(new BasicNameValuePair("email", emailId.getText().toString()));
+
+
+//            List<NameValuePair> params = new ArrayList<NameValuePair>();
+//            params.add(new BasicNameValuePair("username", username));
+//            params.add(new BasicNameValuePair("pass", pass));
+//            params.add(new BasicNameValuePair("email", email));
 
             json = jsonParser.makeHttpRequest(insert_url, "POST", params);
-
 
             return null;
         }
     }
+
+
 }
+
+
